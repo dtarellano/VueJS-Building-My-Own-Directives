@@ -1,6 +1,6 @@
 # vue-build-directives
 > Start up folders were Built with Vue-Cli
-> This is a small excercise to learn how to build my own Directives in Vue. All Code Besides was written by me.
+> This is a small exercise to learn how to build my own Directives in Vue. Beginning Bootstrap in Template was built by Instructor. All other code was written by me.
 
 ## Build Setup
 

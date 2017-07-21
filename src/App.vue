@@ -1,60 +1,56 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-  </div>
+   <div class="container">
+      <div class="row">
+           <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+               <h1>Built-in Directives</h1>
+               <p v-text="'Some Text'"></p>
+               <p v-html="'<h3>Some Big Text</h3>'"></p>
+           </div>
+      </div>
+      <hr>
+      <div class="row">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+               <h1>Custom Directives</h1>
+               <p v-globalHighlight:background.delayed="'green'">Color this</p>
+               <p v-componentHighlight:text.delayed.strobe="{mainColor: 'pink', secondColor: 'cyan', delay: 100}">
+                  {{ strobe }}</p>
+            </div>
+      </div>
+   </div>
 </template>
 
 <script>
 export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
-  }
-}
+   data() {
+      return {
+         strobe: "This Text Will Not Strobe Yet"
+      };
+   },
+   directives: {
+      componentHighlight: {
+         bind(el, binding, vnode) {
+            let delay = 0;
+            if (binding.modifiers["delayed"]) {
+               delay = 3000;
+            }
+            if (binding.modifiers["strobe"]) {
+               let mainColor = binding.value.mainColor;
+               let secondColor = binding.value.secondColor;
+               let currentColor = mainColor;
+               setTimeout(() => {
+                  setInterval(() => {
+                     currentColor === secondColor
+                        ? (currentColor = mainColor)
+                        : (currentColor = secondColor);
+                     if (binding.arg === "text") {
+                        el.style.color = currentColor;
+                        vnode.context.strobe = "I WANT TO STROBE!!!!!";
+                     }
+                  }, binding.value.delay);
+               }, delay);
+            }
+         }
+      }
+   }
+};
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
-</style>
